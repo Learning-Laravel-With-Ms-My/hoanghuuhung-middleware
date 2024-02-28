@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/',[HomeController::class,'index'])->name('home');
 // client route 
 Route::prefix('categories')->group(function(){
     // danh sách chuyên mục
@@ -36,6 +38,8 @@ Route::prefix('categories')->group(function(){
     //xử lý file upoload
     Route::post('/upload',[CategoriesController::class,'handleFile'])->name('categories.upload');
 });
+
+Route::get('san-pham/{id}',[HomeController::class,'getProductDetails']);
 //admin route
 Route::middleware('auth.admin')->prefix('admin')->group(function(){
     Route::get('/dashboard',[DashboardController::class,'index']);
