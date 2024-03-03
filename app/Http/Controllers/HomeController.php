@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\View;
                 'Item 3'
             ];
     
-            $this->data['number'] = 0;
+            $this->data['number'] = 10;
+            $this->data['message'] = 'Đặt hàng thành công';
             return view('home', $this->data);}
 }
