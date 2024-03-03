@@ -17,6 +17,7 @@ use App\Http\Controllers\HomeController;
 |
 */
 Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/san-pham',[HomeController::class,'products']);
 // client route 
 // Route::prefix('categories')->group(function(){
 //     // danh sách chuyên mục
