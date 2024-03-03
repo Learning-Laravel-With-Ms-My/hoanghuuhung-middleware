@@ -18,30 +18,30 @@ use App\Http\Controllers\HomeController;
 */
 Route::get('/',[HomeController::class,'index'])->name('home');
 // client route 
-Route::prefix('categories')->group(function(){
-    // danh sách chuyên mục
-    Route::get('/',[CategoriesController::class,'index'])->name('categories.list');
-    // lấy chi tiết 1 chuyên mục
-    Route::get('/edit/{id}',[CategoriesController::class,'getCategory']);
-    //xử lý hàm update chuyên mục
-    Route::post('/edit/{id}',[CategoriesController::class,'updateCategory']);
-    //hiển thị form add dữ liệu 
-    Route::get('/add',[CategoriesController::class,'addCategory'])->name('categories.add');
-    // xử lý thêm chuyên mục
-    Route::post('/add',[CategoriesController::class,'handleAddCategory']);
-    //xóa chuyên mục
-    Route::delete('/delete/{id}',[CategoriesController::class,'deleteCategory'])->name('categories.delete');
+// Route::prefix('categories')->group(function(){
+//     // danh sách chuyên mục
+//     Route::get('/',[CategoriesController::class,'index'])->name('categories.list');
+//     // lấy chi tiết 1 chuyên mục
+//     Route::get('/edit/{id}',[CategoriesController::class,'getCategory']);
+//     //xử lý hàm update chuyên mục
+//     Route::post('/edit/{id}',[CategoriesController::class,'updateCategory']);
+//     //hiển thị form add dữ liệu 
+//     Route::get('/add',[CategoriesController::class,'addCategory'])->name('categories.add');
+//     // xử lý thêm chuyên mục
+//     Route::post('/add',[CategoriesController::class,'handleAddCategory']);
+//     //xóa chuyên mục
+//     Route::delete('/delete/{id}',[CategoriesController::class,'deleteCategory'])->name('categories.delete');
 
-    //getfile
-    Route::get('/upload',[CategoriesController::class,'getFile']);
+//     //getfile
+//     Route::get('/upload',[CategoriesController::class,'getFile']);
 
-    //xử lý file upoload
-    Route::post('/upload',[CategoriesController::class,'handleFile'])->name('categories.upload');
-});
+//     //xử lý file upoload
+//     Route::post('/upload',[CategoriesController::class,'handleFile'])->name('categories.upload');
+// });
 
-Route::get('san-pham/{id}',[HomeController::class,'getProductDetails']);
-//admin route
-Route::middleware('auth.admin')->prefix('admin')->group(function(){
-    Route::get('/dashboard',[DashboardController::class,'index']);
-    Route::resource('products',ProductsController::class);
-});
+// Route::get('san-pham/{id}',[HomeController::class,'getProductDetails']);
+// //admin route
+// Route::middleware('auth.admin')->prefix('admin')->group(function(){
+//     Route::get('/dashboard',[DashboardController::class,'index']);
+//     Route::resource('products',ProductsController::class);
+// });

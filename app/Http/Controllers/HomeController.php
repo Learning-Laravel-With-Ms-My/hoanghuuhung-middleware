@@ -4,25 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-class HomeController extends Controller
-{
-    //
-    public function index(){
-        $title = "học lập trình";
-        $content  = "phải học được lập trình";
-        // $dataView = [
-        //     'title' => $title,
-        //     'content' => $content,
-        // ];
-        // compact('title', 'content')
-        // ->with('title', $title)->with('content', $content
-        return view('home')->with(['title'=>$title ,'content'=> $content]);
-            // return View::make('home',compact('title', 'content'));
-        // $contentView = view('home')->render();
-        // // $contentView = $contentView->render();
-        //     dd($contentView);
-    }
-    public function getProductDetails($id){
-        return view('clients.products.detail',compact('id'));
-    }
+
+    class HomeController extends Controller
+    {
+        public $data = [];
+        public function index(){
+            $this->data['welcome'] = 'Học lập trình laravel tại Unicode';
+            $this->data['content'] = '<h3>Chương 1: Nhập môn laravel</h3>
+            <p>Kiến thức 1</p>
+            <p>Kiến thức 2</p>
+            <p>Kiến thức 3</p>';
+            $this->data['index'] = 0;
+    
+            $this->data['dataArr'] = [
+                'Item 1',
+                'Item 2',
+                'Item 3'
+            ];
+    
+            $this->data['number'] = 0;
+            return view('home', $this->data);}
 }
