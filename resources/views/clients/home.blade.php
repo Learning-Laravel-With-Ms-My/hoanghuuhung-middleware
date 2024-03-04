@@ -10,15 +10,18 @@
 @endsection
 
 @section('content')
-@datetime('2021-12-12 15:00:20')
-<h1>Trang chủ</h1>
-@env('production')
+    @datetime('2021-12-12 15:00:20')
+    <h1>Trang chủ</h1>
+    @env('production')
 
-<h2>Môi trường production</h2>
-@elseenv('local'){
-    <p>môi truonwgfg local</p>
-}
-@endenv
+    <h2>Môi trường production</h2>
+    @elseenv('test'){
+        <p>môi truonwg local</p>
+    }
+    @endenv
+    <x-alert type="success" :content="$title" />
+    {{-- <x-inputs.button/>
+    <x-form-button/> --}}
    
 @endsection
 

@@ -1,0 +1,1 @@
+<div class="btn tbn-primary">Đăng ký ngay</div>

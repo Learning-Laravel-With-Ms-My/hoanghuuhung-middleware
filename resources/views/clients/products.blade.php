@@ -15,3 +15,4 @@
 
 @section('css')
 @endsection
+<x-package-alert/>

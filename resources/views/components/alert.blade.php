@@ -1,0 +1,1 @@
+<button class="alert alert-{{$type}}" >Đặt hàng thành công</button>
