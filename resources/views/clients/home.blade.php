@@ -12,6 +12,13 @@
 @section('content')
 @datetime('2021-12-12 15:00:20')
 <h1>Trang chủ</h1>
+@env('production')
+
+<h2>Môi trường production</h2>
+@elseenv('local'){
+    <p>môi truonwgfg local</p>
+}
+@endenv
    
 @endsection
 
