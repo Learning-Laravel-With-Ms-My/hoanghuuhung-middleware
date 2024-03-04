@@ -32,5 +32,6 @@
     </main>
     @include('clients.blocks.footer')
     @yield('js')
+    @stack('scripts')
 </body>
 </html>

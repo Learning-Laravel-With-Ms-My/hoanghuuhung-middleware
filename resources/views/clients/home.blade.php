@@ -10,6 +10,7 @@
 @endsection
 
 @section('content')
+@datetime('2021-12-12 15:00:20')
 <h1>Trang chủ</h1>
    
 @endsection
@@ -21,3 +22,9 @@
 @section('js')
 
 @endsection
+
+@push('scripts')
+    <script>
+        console.log("log lan 1");
+    </script>
+@endpush

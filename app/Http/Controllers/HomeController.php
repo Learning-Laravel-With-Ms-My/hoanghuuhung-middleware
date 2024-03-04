@@ -15,4 +15,15 @@ use Illuminate\Support\Facades\View;
         public function products(){
             $this->data['title'] = 'Sản phẩm';
             return view('clients.products', $this->data);}
+        public function getAdd(){
+            $this->data['title'] = 'Them Sản phẩm';
+
+            return view('clients.add', $this->data);
+        }
+        public function postAdd(Request $request){
+            dd($request);
+        }
+        public function putAdd(Request $request){
+            dd($request);
+        }
 }
