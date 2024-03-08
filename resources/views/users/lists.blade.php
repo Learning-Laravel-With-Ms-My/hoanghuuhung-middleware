@@ -7,6 +7,7 @@
 @section('content')
 
 <h1>{{$title}}</h1>
+<a href="{{route('users.add')}}" class="btn btn-primary">Them user</a>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -17,8 +18,8 @@
             </tr>
         </thead>
         <tbody>
-            @if(!empty($user))
-            @foreach ($user as $key => $value)
+            @if(!empty($usersList))
+            @foreach ($usersList as $key => $value)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$value->fullname}}</td>
