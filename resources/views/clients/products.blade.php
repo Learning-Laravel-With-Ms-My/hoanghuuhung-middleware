@@ -15,4 +15,4 @@
 
 @section('css')
 @endsection
-<x-package-alert/>
+{{-- <x-package-alert/> --}}
