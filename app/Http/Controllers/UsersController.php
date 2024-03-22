@@ -13,9 +13,10 @@ class UsersController extends Controller
     }
     public function index(){
         $statement = $this->users->statementUser('SELECT * FROM users');
-        dd($statement);
+        // dd($statement);
         $title = "danh sách người dùng";
-        
+        $this->users->learningQueryBuilder();
+
         $usersList = $this->users->getAllUsers();
 
         return view('users.lists', compact('title','usersList'));
@@ -107,4 +108,5 @@ class UsersController extends Controller
         }
         return redirect()->route('users.index')->with('msg',$msg);
     }
+
 }
