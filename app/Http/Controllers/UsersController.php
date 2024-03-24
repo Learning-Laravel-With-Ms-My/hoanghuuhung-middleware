@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Models\Users;
-
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -16,9 +15,7 @@ class UsersController extends Controller
         // dd($statement);
         $title = "danh sách người dùng";
         $this->users->learningQueryBuilder();
-
         $usersList = $this->users->getAllUsers();
-
         return view('users.lists', compact('title','usersList'));
     }
     public function add(){
