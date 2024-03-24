@@ -65,7 +65,18 @@ class Users extends Model
         //join bảng
         $list =DB::table('users')
         ->select('users.*', 'groups.name')
-        ->rightJoin('groups', 'users.group_id', '=', 'groups_id')
+        // ->rightJoin('groups', 'users.group_id', '=', 'groups_id')
+        // ->orderBy('id','desc')
+        // ->orderBy('created_at','asc')
+        // ->inRandomOrder()
+        // ->select(DB::raw('count(id) as email_count'),'email','fullname')
+        // ->groupBy('email')
+        // ->groupBy('fullname')
+        // ->having('email_count','>=',2)
+        // ->limit(1)
+        // ->offset(1)
+        ->take(2)
+        ->skip(2)
             ->get();
         $sql = DB::getQueryLog();
         dd($sql);
