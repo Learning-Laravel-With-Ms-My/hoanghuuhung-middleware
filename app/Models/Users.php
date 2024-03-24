@@ -35,26 +35,38 @@ class Users extends Model
         DB::enableQueryLog();
         // lấy tất cả bản ghi
         $id =2;
-        $lists = DB::table($this->table)
+        // $lists = DB::table($this->table)
         // dd($list);
         // ->where('id','>=',1)->get();
         // ->where('id','<>',19)->get();
-        ->select('fullname as hoten', 'email', 'id','updated_at')
-        ->where('id',1)
+        // ->select('fullname as hoten', 'email', 'id','updated_at','created_at')
+        // ->where('id',1)
         // ->where(function($query) use  ($id) {
         //     $query ->where('id','<',$id)->orWhere('id','>',2);
         // })
         // ->where('fullname','like','%hoanghung%')
         // ->whereBetween('id',[1,3])
-        ->whereNotBetween('id',[1,3])
+        // ->whereNotBetween('id',[1,3])
+        // ->whereDate('updated_at','2024-3-24')    
+        // ->whereMonth('updated_at','03')
+        // ->whereDate('updated_at','24')
+        // ->whereYear('updated_at','2024')
+        // ->whereColumn('updated_at','<>','created_at')
         // ->whereIn('id',[1,3])
         // ->whereNotIn('id',[1,3])
         // ->whereNull('updated_at')
-        ->whereNotNull('updated_at')
+        // ->whereNotNull('updated_at')
         // ->where('id', 1)->orWhere('id',2)
         // // ->get();
         // ->toSql();
-        ->get();
+        // ->get();
+
+
+        //join bảng
+        $list =DB::table('users')
+        ->select('users.*', 'groups.name')
+        ->rightJoin('groups', 'users.group_id', '=', 'groups_id')
+            ->get();
         $sql = DB::getQueryLog();
         dd($sql);
         // lấy bản ghi đầu tiên
