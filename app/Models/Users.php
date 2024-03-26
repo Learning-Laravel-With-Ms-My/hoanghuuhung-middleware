@@ -10,31 +10,38 @@ class Users extends Model
 {
     use HasFactory;
     protected $table = 'users';
-    public function getAllUsers(){
+    public function getAllUsers()
+    {
         $users = DB::select('SELECT * FROM users WHERE id');
         return $users;
     }
-    public function addUser($data){
-        DB::insert('INSERT INTO users (fullname, email, create_at) values (?, ?,?)',$data);
+    public function addUser($data)
+    {
+        DB::insert('INSERT INTO users (fullname, email, create_at) values (?, ?,?)', $data);
 
     }
-    public function getDetail($id){
-       return DB::select('SELECT * FROM '. $this->table.' WHERE id = ?',[$id]);
+    public function getDetail($id)
+    {
+        return DB::select('SELECT * FROM ' . $this->table . ' WHERE id = ?', [$id]);
     }
-    public function updateUser($data, $id){
+    public function updateUser($data, $id)
+    {
         $data[] = $id;
         return DB::update('UPDATE ' . $this->table . ' SET fullname=?, email=?, update_at=? WHERE id = ?', $data);
     }
-    public function deleteUser($id){
-        return DB::delete('DELETE FROM '. $this->table . ' WHERE id=?',[$id]);
+    public function deleteUser($id)
+    {
+        return DB::delete('DELETE FROM ' . $this->table . ' WHERE id=?', [$id]);
     }
-    public function statementUser($sql){
+    public function statementUser($sql)
+    {
         return DB::statement($sql);
     }
-    public function learningQueryBuilder(){
+    public function learningQueryBuilder()
+    {
         DB::enableQueryLog();
         // lấy tất cả bản ghi
-        $id =2;
+        $id = 2;
         // $lists = DB::table($this->table)
         // dd($list);
         // ->where('id','>=',1)->get();
@@ -63,8 +70,8 @@ class Users extends Model
 
 
         //join bảng
-        $list =DB::table('users')
-        ->select('users.*', 'groups.name')
+        // $list =DB::table('users')
+        // ->select('users.*', 'groups.name')
         // ->rightJoin('groups', 'users.group_id', '=', 'groups_id')
         // ->orderBy('id','desc')
         // ->orderBy('created_at','asc')
@@ -75,14 +82,50 @@ class Users extends Model
         // ->having('email_count','>=',2)
         // ->limit(1)
         // ->offset(1)
-        ->take(2)
-        ->skip(2)
-            ->get();
-        $sql = DB::getQueryLog();
-        dd($sql);
+        // ->take(2)
+        // ->skip(2)
+        //     ->get();
+
         // lấy bản ghi đầu tiên
         // $list = DB::table($this->table)->first();
+
+        $status = DB::table('users')->insert([
+            'fullname' => "Hoang huuhung",
+            'email' => "hoang@example",
+            'group_id' => 1,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+
+        // dd($status);
+        // $lastId = DB::getPdo()->lastInsertId();
+
+        // $lastId = DB::table('users')->insertGetId([
+        //     'fullname' =>"Hoang huuhung",
+        //     'email' =>"hoang@example",
+        //     'group_id'=>1,
+        //     'created_at'=>date('Y-m-d H:i:s')
+        // ]);
+        // dd($lastId);
+        // $status = DB::table('users')
+        //     ->where('id', 2)
+        //     ->update([
+        //         'fullname' => "Hoang huuhung",
+        //         'email' => "hoang@example",
+        //         'group_id' => 1,
+        //         'created_at' => date('Y-m-d H:i:s')
+        //     ]);
+
+
+        // $status = DB::table('users')
+        // ->where('id', 2)
+        // ->delete();
+        // dd($status);
+
+        $count = DB::table('users')->wheres('id','>',20)->count();
+        dd($count);
+        $sql = DB::getQueryLog();
+        dd($sql);
     }
 
-    
+
 }
