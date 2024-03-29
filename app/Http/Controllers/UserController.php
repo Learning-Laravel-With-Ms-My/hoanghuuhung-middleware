@@ -28,6 +28,7 @@ class UserController extends Controller
         $users = new Users();
         $filters =[];
         $keywords =null;
+        $sortBy =$request->input('sort-type');
         if(!empty($request->status)){
             $status = $request->status;
             if($status == 'active'){
@@ -45,10 +46,27 @@ class UserController extends Controller
             $keywords = $request->keywords;
             
         }
-        $userList = $this->users->getAllUsers($filters,$keywords);
+
+        //xurw ly sap xep
+        $sortType = $request->input('sort-type');
+        $allowSort =['asc','desc'];
+        if(!empty($sortType) && in_array($sortType,$allowSort)){
+            if($sortType=='desc'){
+                $sortType= 'asc';
+            }else{
+                $sortType='desc';
+            }
+        }else{
+            $sortType ='asc';
+        }
+        $sortArr =[
+            'sortBy' => $sortBy,
+            'sort-type'=>$sortType
+        ];
+        $userList = $this->users->getAllUsers($filters,$keywords,$sortArr);
         $groups = $this->groups->getAll();
         // dd($groups);
-        return view('clients.users.lists', compact('title', 'userList','groups'));
+        return view('clients.users.lists', compact('title', 'userList','groups','sortType'));
     }
 
     public function add()
