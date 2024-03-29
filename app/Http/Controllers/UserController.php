@@ -4,26 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Users;
+use App\Models\Groups;
+use App\Helper\Functions;
 
 class UserController extends Controller
 {
     private $users;
+    private $groups;
     public function __construct()
     {
         $this->users = new Users();
+        $this->groups = new Groups();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         // $statement = $this->users->statementUser('DELETE FROM users');
         // $statement = $this->users->statementUser('SELECT * FROM users');
         // dd($statement);
 
         $title = 'Danh sách người dùng';
-        $this->users->learnQueryBuilder();
+        // $this->users->learnQueryBuilder();
         $users = new Users();
-        $userList = $this->users->getAllUsers();
-        return view('clients.users.lists', compact('title', 'userList'));
+        $filters =[];
+        $keywords =null;
+        if(!empty($request->status)){
+            $status = $request->status;
+            if($status == 'active'){
+                $status = 1;
+            }else{
+                $status =0;
+            }
+            $filters[] =['users.status','=',$status];
+        }
+        if(!empty($request->group_id)){
+            $groupId = $request->group_id;
+            $filters[] =['users.group_id','=',$groupId];
+        }
+        if(!empty($request->keywords)){
+            $keywords = $request->keywords;
+            
+        }
+        $userList = $this->users->getAllUsers($filters,$keywords);
+        $groups = $this->groups->getAll();
+        // dd($groups);
+        return view('clients.users.lists', compact('title', 'userList','groups'));
     }
 
     public function add()
