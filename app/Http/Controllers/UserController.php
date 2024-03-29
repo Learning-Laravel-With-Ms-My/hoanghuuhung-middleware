@@ -11,6 +11,7 @@ class UserController extends Controller
 {
     private $users;
     private $groups;
+    const _PER_PAGE = 2;
     public function __construct()
     {
         $this->users = new Users();
@@ -63,7 +64,7 @@ class UserController extends Controller
             'sortBy' => $sortBy,
             'sort-type'=>$sortType
         ];
-        $userList = $this->users->getAllUsers($filters,$keywords,$sortArr);
+        $userList = $this->users->getAllUsers($filters,$keywords,$sortArr,self::_PER_PAGE);
         $groups = $this->groups->getAll();
         // dd($groups);
         return view('clients.users.lists', compact('title', 'userList','groups','sortType'));

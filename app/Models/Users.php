@@ -13,7 +13,7 @@ class Users extends Model
 
     protected $table = 'users';
 
-    public function getAllUsers($filter = [],$keywords,$sortByArr = null)
+    public function getAllUsers($filter = [],$keywords,$sortByArr = null,$perPage = null)
     {
         // $users = DB::select('SELECT * FROM users ORDER BY create_at DESC');
 
@@ -39,7 +39,12 @@ class Users extends Model
                 // $query->orWhere('email', 'like' ,'%'.$keywords.'%');
             });
         }
-        $users = $users->get();
+        // $users = $users->get();
+        if(!empty($perPage)){
+            $users = $users->paginate($perPage)->withQueryString();
+        }else{
+            $users = $users->get(); 
+        }
         // dd($users);
         return $users;
     }
