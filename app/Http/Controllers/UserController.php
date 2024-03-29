@@ -72,8 +72,9 @@ class UserController extends Controller
 
     public function add()
     {
+        $groups = $this->groups->getAll();
         $title = 'Thêm người dùng';
-        return view('clients.users.add', compact('title'));
+        return view('clients.users.add', compact('title','groups'));
     }
 
     public function postAdd(Request $request)
@@ -82,20 +83,32 @@ class UserController extends Controller
             [
                 'fullname' => 'required|min:5',
                 'email' => 'required|email|unique:users',
+                'group_id' =>['required','integer', function($attribute, $value, $fail ){
+                    if($value == 0){
+                        $fail('Bat buoc chon nhom');
+                    }
+                }],
+                'status' =>'required|integer',
             ],
             [
                 'fullname.required' => 'Ho va ten bat buoc phai nhap',
                 'fullname.min' => 'Ho va ten phai lon hon 5 ki tu',
                 'email.required' => 'Email bat buoc phai nhap',
                 'email.email' => 'Email khong dung dinh dang',
-                'email.unique' => 'Email da ton tai'
+                'email.unique' => 'Email da ton tai',
+                'group_id.required' => 'Nhom ko duoc de trong',
+                'group_id.integer' => 'Nhom ko hop le',
+                'status.required' => 'Trang thai bat buoc phai nhap',
+                'status.integer' => 'Trang thai ko hop le',
             ]
         );
 
         $dataInsert = [
-            $request->fullname,
-            $request->email,
-            date('Y-m-d H:i:s')
+            'fullname'=> $request->fullname,
+            'email'=>$request->email,
+            'group_id'=>$request->group_id,
+            'status'=>$request->status,
+            'create_at' => date('Y-m-d H:i:s'),
         ];
         $this->users->addUser($dataInsert);
         return redirect(route('users.index'))->with('msg', 'Them thanh cong');
