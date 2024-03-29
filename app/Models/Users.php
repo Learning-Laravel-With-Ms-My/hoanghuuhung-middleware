@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -9,145 +10,161 @@ use Illuminate\Support\Facades\DB;
 class Users extends Model
 {
     use HasFactory;
+
     protected $table = 'users';
+
     public function getAllUsers()
     {
-        $users = DB::select('SELECT * FROM users WHERE id');
+        $users = DB::select('SELECT * FROM users ORDER BY create_at DESC');
         return $users;
     }
+
     public function addUser($data)
     {
-        DB::insert('INSERT INTO users (fullname, email, create_at) values (?, ?,?)', $data);
-
+        DB::insert('INSERT INTO users (fullname, email, create_at) VALUES (?,?,?)', $data);
     }
+
     public function getDetail($id)
     {
         return DB::select('SELECT * FROM ' . $this->table . ' WHERE id = ?', [$id]);
     }
+
     public function updateUser($data, $id)
     {
-        $data[] = $id;
-        return DB::update('UPDATE ' . $this->table . ' SET fullname=?, email=?, update_at=? WHERE id = ?', $data);
+        $data = array_merge($data, [$id]);
+        return DB::update('UPDATE ' . $this->table . ' SET fullname = ?, email = ?, update_at = ? WHERE id = ?', $data);
     }
+
     public function deleteUser($id)
     {
-        return DB::delete('DELETE FROM ' . $this->table . ' WHERE id=?', [$id]);
+        return DB::delete("DELETE FROM $this->table WHERE id =?", [$id]);
     }
+
     public function statementUser($sql)
     {
         return DB::statement($sql);
     }
-    public function learningQueryBuilder()
+
+    public function learnQueryBuilder()
     {
         DB::enableQueryLog();
-        // lấy tất cả bản ghi
-        $id = 2;
-        // $lists = DB::table($this->table)
-        // dd($list);
-        // ->where('id','>=',1)->get();
-        // ->where('id','<>',19)->get();
-        // ->select('fullname as hoten', 'email', 'id','updated_at','created_at')
-        // ->where('id',1)
-        // ->where(function($query) use  ($id) {
-        //     $query ->where('id','<',$id)->orWhere('id','>',2);
-        // })
-        // ->where('fullname','like','%hoanghung%')
-        // ->whereBetween('id',[1,3])
-        // ->whereNotBetween('id',[1,3])
-        // ->whereDate('updated_at','2024-3-24')    
-        // ->whereMonth('updated_at','03')
-        // ->whereDate('updated_at','24')
-        // ->whereYear('updated_at','2024')
-        // ->whereColumn('updated_at','<>','created_at')
-        // ->whereIn('id',[1,3])
-        // ->whereNotIn('id',[1,3])
-        // ->whereNull('updated_at')
-        // ->whereNotNull('updated_at')
-        // ->where('id', 1)->orWhere('id',2)
-        // // ->get();
-        // ->toSql();
+        // $id = 2;
+        // $list = DB::table($this->table)
+        //     ->select('fullname as hoten', 'email', 'id', 'update_at','create_at')
+        // ->where('id', 'like', '%1%')
+        // ->whereNotIn('id', [1, 3])
+        // ->whereIn('id', [1, 3])
+        // ->whereNotBetween('id', [1, 3])
+        // ->whereBetween('id', [1, 3])
+        // ->whereNull('update_at')    
+        // ->whereNotNull('update_at')    
+        // ->whereYear('create_at', '2024')
+        // ->whereColumn('create_at', 'update_at') 
         // ->get();
+        // ->where('id', '>', 1)   
+        // ->where('id', '<>', 8)
+        // ->where('id', '>=', 8)
+        // ->where('id', '<=', 9)
+        // ->where([
+        //     // ['id',  '>=', 8],
+        //     // ['id',  '<=', 9],
+        //     'id'=> '8',
+        //     'fullname'=> 'Nguyễn Văn Tường Nu',
+        // ])
+        // ->where('id', 1)
+        // ->orWhere('id', 2)
+        // ->toSql();
+        // ->where('id', 0)
+        // // ->where('id','<',2)
+        // ->where(function ($query) use ($id) {
+        //     $query->where('id', '<', $id)->orWhere('id', '>', $id);
+        // })
 
-
-        //join bảng
-        // $list =DB::table('users')
-        // ->select('users.*', 'groups.name')
-        // ->rightJoin('groups', 'users.group_id', '=', 'groups_id')
-        // ->orderBy('id','desc')
-        // ->orderBy('created_at','asc')
+        //Join bang
+        // $list = DB::table('users')
+        // ->select('users.*', 'groups.name as group_name')
+        // ->rightJoin('groups','users.group_id','=','groups.id')
+        // ->orderBy('create_at', 'desc')
+        // ->orderBy('id', 'desc')
         // ->inRandomOrder()
-        // ->select(DB::raw('count(id) as email_count'),'email','fullname')
-        // ->groupBy('email')
+        // ->select(DB::raw('count(id) as email_count'), 'email', 'fullname')
+        // ->groupBy('email')  
+        // ->having('email_count', '>=', 1)
         // ->groupBy('fullname')
-        // ->having('email_count','>=',2)
         // ->limit(1)
         // ->offset(1)
         // ->take(2)
         // ->skip(2)
-        //     ->get();
+        // ->get();
 
-        // lấy bản ghi đầu tiên
-        // $list = DB::table($this->table)->first();
+        // insert data
+        // $status = DB::table('users')->insert([
+        //     'fullname' => 'Nguyễn Văn Tường Ne',
+        //     'email' => 'ne.nguyenvan25@student.passerellesnumeriques.org',
+        //     'group_id' => 1,
+        //     'create_at' => date('Y-m-d H:i:s'),
+        // ]);
 
-        $status = DB::table('users')->insert([
-            'fullname' => "Hoang huuhung",
-            'email' => "hoang@example",
-            'group_id' => 1,
-            'created_at' => date('Y-m-d H:i:s')
-        ]);
-
-        // dd($status);
         // $lastId = DB::getPdo()->lastInsertId();
+        // dd($lastId);
 
         // $lastId = DB::table('users')->insertGetId([
-        //     'fullname' =>"Hoang huuhung",
-        //     'email' =>"hoang@example",
-        //     'group_id'=>1,
-        //     'created_at'=>date('Y-m-d H:i:s')
+        //     'fullname' => 'Nguyễn Văn Tường Non',
+        //     'email' => 'non.nguyenvan25@student.passerellesnumeriques.org',
+        //     'group_id' => 1,
+        //     'create_at' => date('Y-m-d H:i:s'),
         // ]);
         // dd($lastId);
-        // $status = DB::table('users')
-        //     ->where('id', 2)
-        //     ->update([
-        //         'fullname' => "Hoang huuhung",
-        //         'email' => "hoang@example",
-        //         'group_id' => 1,
-        //         'created_at' => date('Y-m-d H:i:s')
-        //     ]);
 
-
+        // sua bang ghi
         // $status = DB::table('users')
-        // ->where('id', 2)
+        // ->where('id', 6)
+        // ->update([
+        //     'fullname' => 'Nguyễn Văn Tường Nen',
+        //     'email' => 'nen.nguyenvan25@student.passerellesnumeriques.org',
+        //     'update_at' => date('Y-m-d H:i:s'),
+        // ]);
+
+        //xoa bang ghi
+        // $status = DB::table('users')
+        // ->where('id', 6)
         // ->delete();
-        // dd($status);
 
-        // $count = DB::table('users')->wheres('id','>',20)->count();
+        //dem bang ghi
+        // $count = DB::table('users')
+        // ->where('id','>',3)
+        // ->count();
         // dd($count);
+
         $list = DB::table('users')
-        // ->selectRaw('email,  fullname count(id) as email_count')
-        // ->groupBy('fullname')
-        // ->where(DB::raw('id>2'))
-        // ->where('id','>',2)
-        // ->orWhereRaw('id>20')
-        // ->orderByRaw('email,fullname')
-        // ->having('email_count' , '>=',2)
-        // ->havingRaw('email_count >?',[2])
-        // ->where(
-        //     'group_id',
-        //     '=',
-        //     function ($query){
-        //         $query->select('id')
-        //         ->from('groups')
-        //         ->where('name', '=','Administrator');
-        //     }
-        // )
-        // ->select('email',DB::raw('(SELECT count(id) FROM `groups`) as group_count') )
-        // ->selectRaw('SELECT count(id) FROM `groups`) as group_count')
+            // ->selectRaw('fullname, email, count(id) as email_count')
+            // ->select(DB::raw('fullname, email'))
+            // ->groupBy('email')
+            // ->groupBy('fullname')
+            // ->where(DB::raw('id>2'))
+            // ->orWhereRaw('id>?', [`2`])
+            // ->orderByRaw('create_at DESC , update_at ASC')
+            // ->groupByRaw('fullname, email')
+            // ->havingRaw('email_count >= 1')
 
-        ->get();
+            // ->where(
+            //     'group_id',
+            //     '=',
+            //     function ($query) {
+            //         $query->select('id')
+            //             ->from('groups')
+            //             ->where('name', '=', 'Admin');
+            //     }
+            // )
+
+            // ->select('email', DB::raw('(SELECT count(id) FROM `groups`) as group_count'))
+            ->selectRaw('email, (SELECT count(id) FROM `groups`) as group_count')
+            ->get();
+
+        // dd($list);
+
         $sql = DB::getQueryLog();
-        dd($sql);
+        // dd($sql);
+        $detail = DB::table($this->table)->first();
     }
-
-
 }
