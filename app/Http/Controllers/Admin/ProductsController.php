@@ -12,6 +12,10 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+        // echo 'products';
+        //check login bang  session
+    }
     public function index()
     {
         //

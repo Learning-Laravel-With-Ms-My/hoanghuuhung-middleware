@@ -10,10 +10,12 @@ class DashboardController extends Controller
     //
     public function __construct()
     {
-        echo 'Starting Dashboard';
+        // echo 'Starting Dashboard';
         //return 'Khởi động';
+        //check login bang  session
+
     }
     public function index(){
-        return '<h2> Dashboard</h2>';
+        return '<h2> Dashboard Welcome</h2>';
     }
 }
